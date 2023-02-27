@@ -1,3 +1,43 @@
+<?php
+require 'dbconnect.php';
+error_reporting(0);
+if(!empty($_POST)){
+$firstname = $_POST['fname'];
+$lastname = $_POST['lname'];
+$email = $_POST['email'];
+$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+echo $_POST['submit'];
+
+$sql= "SELECT email FROM users where email = '$email'";
+if (mysqli_num_rows($conn->query($sql))) {
+    echo <<<EOL
+<div class="alert alert-danger text-center" role="alert">
+An account is already registered with your email address.!
+</div>
+EOL;
+}
+else{
+$sql = "INSERT INTO users (firstname, lastname, email , password )
+VALUES ('$firstname', '$lastname', '$email', '$password')";
+
+if ($conn->query($sql) === TRUE) {
+  unset($_POST);
+  header('Location: login.php');
+} else {
+  echo "Error: " . $sql . "<br>" . $conn->error;
+}
+$conn->close();
+
+}
+
+}
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -20,44 +60,43 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
                                     <div class="card-body">
-                                        <form>
+                                        <form action="register.php" method="post">
                                             <div class="form-row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="inputFirstName">First Name</label>
-                                                        <input class="form-control py-4" id="inputFirstName" type="text" placeholder="Enter first name" />
+                                                        <input class="form-control py-4" id="inputFirstName" type="text" placeholder="Enter first name" name="fname" required/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="inputLastName">Last Name</label>
-                                                        <input class="form-control py-4" id="inputLastName" type="text" placeholder="Enter last name" />
+                                                        <input class="form-control py-4" id="inputLastName" type="text" placeholder="Enter last name" name="lname" required/>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="inputEmailAddress">Email</label>
-                                                <input class="form-control py-4" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" />
+                                                <input class="form-control py-4" id="inputEmailAddress" type="email" aria-describedby="emailHelp" placeholder="Enter email address" name="email" required/>
                                             </div>
                                             <div class="form-row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label class="small mb-1" for="inputPassword">Password</label>
-                                                        <input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" />
+                                                        <input class="form-control py-4" id="inputPassword" type="password" placeholder="Enter password" name="password" required/>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="small mb-1" for="inputConfirmPassword">Confirm Password</label>
-                                                        <input class="form-control py-4" id="inputConfirmPassword" type="password" placeholder="Confirm password" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block" href="login.html">Create Account</a></div>
+                                                
+                                            </div>  
+                                                 <div class="col-md-12 text-center">
+                                                     <button type="submit" class="btn btn-primary">Create Account</button>  
+
+                                                </div> 
+                                                                  
                                         </form>
                                     </div>
                                     <div class="card-footer text-center">
-                                        <div class="small"><a href="login.html">Have an account? Go to login</a></div>
+                                        <div class="small"><a href="">Have an account? Go to login</a></div>
                                     </div>
                                 </div>
                             </div>
