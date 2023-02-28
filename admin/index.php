@@ -1,3 +1,12 @@
+<?php
+session_start();
+if($_SESSION['valid'] != true){
+    header("location: login.php");
+    die();
+ }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,6 +19,14 @@
         <link href="css/styles.css" rel="stylesheet" />
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+    function logout()
+    {
+    var url = "logout.php";
+    window.location(url);
+    }
+    </script>
+
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -32,7 +49,7 @@
                         <a class="dropdown-item" href="#">Settings</a>
                         <a class="dropdown-item" href="#">Activity Log</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <a class="dropdown-item" href="logout.php">Logout</a>
                     </div>
                 </li>
             </ul>

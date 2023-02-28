@@ -5,7 +5,7 @@ if(!empty($_POST)){
 $firstname = $_POST['fname'];
 $lastname = $_POST['lname'];
 $email = $_POST['email'];
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+$password = $_POST['password'];
 
 echo $_POST['submit'];
 
@@ -96,7 +96,7 @@ $conn->close();
                                         </form>
                                     </div>
                                     <div class="card-footer text-center">
-                                        <div class="small"><a href="">Have an account? Go to login</a></div>
+                                        <div class="small"><a href="login.php">Have an account? Go to login</a></div>
                                     </div>
                                 </div>
                             </div>
