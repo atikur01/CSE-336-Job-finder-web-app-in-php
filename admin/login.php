@@ -1,6 +1,5 @@
 <?php
 require "dbconnect.php";
-//error_reporting(0);
 if (!empty($_POST)) {
     $email = $_POST["email"];
     $password = $_POST["password"];
@@ -9,10 +8,10 @@ if (!empty($_POST)) {
     $result = $conn->query($sql);
 
     if ($result->num_rows == 1) {
-        // output data of each row
+        // output data of each row. fetch_assoc() fetches a result row as an associative array
         while ($row = $result->fetch_assoc()) {
-            $storedPassword = $row["password"];
-            if ($password == $storedPassword) {
+            $hash = $row["password"];
+            if (password_verify($password, $hash)) {
                 session_start();
                 $_SESSION["id"] = $row["id"];
                 $_SESSION["firstname"] = $row["firstname"];
@@ -21,6 +20,14 @@ if (!empty($_POST)) {
                 $_SESSION["valid"] = true;
                 unset($_POST);
                 header("Location: index.php");
+            }
+            else{
+                echo <<<EOL
+                <div class="alert alert-danger text-center" role="alert">
+                Wrong Password!
+                </div>
+                EOL;
+
             }
         }
     }

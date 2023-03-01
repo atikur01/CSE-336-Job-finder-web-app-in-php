@@ -6,8 +6,7 @@ $firstname = $_POST['fname'];
 $lastname = $_POST['lname'];
 $email = $_POST['email'];
 $password = $_POST['password'];
-
-echo $_POST['submit'];
+$param_password = password_hash($password, PASSWORD_DEFAULT);
 
 $sql= "SELECT email FROM users where email = '$email'";
 if (mysqli_num_rows($conn->query($sql))) {
@@ -19,11 +18,15 @@ EOL;
 }
 else{
 $sql = "INSERT INTO users (firstname, lastname, email , password )
-VALUES ('$firstname', '$lastname', '$email', '$password')";
+VALUES ('$firstname', '$lastname', '$email', '$param_password')";
 
 if ($conn->query($sql) === TRUE) {
   unset($_POST);
-  header('Location: login.php');
+  echo <<<EOL
+  <div class="alert alert-success text-center" role="alert">
+  You have successfully registered!
+</div>
+EOL;
 } else {
   echo "Error: " . $sql . "<br>" . $conn->error;
 }
@@ -108,7 +111,7 @@ $conn->close();
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2020</div>
+                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;
