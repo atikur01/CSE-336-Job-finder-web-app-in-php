@@ -1,28 +1,42 @@
 <?php
 require 'dbconnect.php';
+error_reporting(E_ERROR | E_PARSE);
 
-$sql = "SELECT * FROM category";
+$sql = "";
+if (!empty($_POST)) {
+    $catname = $_POST['catname'];
+    $catdes = $_POST['catdes'];
+    $id = $_POST['catid'];
 
-if (mysqli_query($conn, $sql)) {
-    $tableData = mysqli_query($conn, $sql);
+    $sql = "UPDATE category
+    SET cat_name = '$catname', cat_des = '$catdes'
+    WHERE cat_id = $id";
 
-} else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
-}
-
-
-
-if (isset($_GET['status'])) {
-    if ($_GET['status'] == 'delete') {
-        $delid = $_GET['id'];
-        $delquery = "DELETE FROM category WHERE cat_id=$delid";
-        mysqli_query($conn, $delquery);
-        header("location: managecat.php");
+    if ($conn->query($sql) === TRUE) {
+        unset($_POST);
+        echo <<<EOL
+    <div class="alert alert-success text-center" role="alert">
+    Category Edited successfully!
+  </div>
+  EOL;
     }
 }
 
-$conn->close();
 
+if (isset($_GET['status'])) {
+    if ($_GET['status'] == 'edit') {
+        $editid = $_GET['id'];
+        $editquery = "Select * FROM category WHERE cat_id=$editid";
+        $tableData = mysqli_query($conn, $editquery);
+        $row = mysqli_fetch_assoc($tableData);
+        //header("location: managecat.php");
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+
+$conn->close();
 
 ?>
 
@@ -35,7 +49,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Add Category - SB Admin</title>
+    <title>Edit Category - SB Admin</title>
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
         crossorigin="anonymous"></script>
@@ -145,51 +159,37 @@ $conn->close();
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid">
-                    <h1 class="mt-4">Manage Category</h1>
+                    <h1 class="mt-4">Edit Category</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Manage Category</li>
+                        <li class="breadcrumb-item active">Edit Category</li>
                     </ol>
 
                     <div class="card mb-4">
                         <div class="card-body">
 
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Category ID</th>
-                                        <th scope="col">Category Name</th>
-                                        <th scope="col">Category description</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php while ($row = mysqli_fetch_assoc($tableData)) { ?>
-                                        <tr>
-                                            <th scope="row">
-                                                <?php echo $row['cat_id']; ?>
-                                                </td>
-                                            </th>
-                                            <td>
-                                                <?php echo $row['cat_name']; ?>
-                                            </td>
-                                            </td>
-                                            <td>
-                                                <?php echo $row['cat_des']; ?>
-                                            </td>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-success"
-                                                    href="editcatagory.php?status=edit&&id=<?php echo $row['cat_id']; ?>">Edit</a>
-                                                <a class="btn btn-danger"
-                                                    href="?status=delete&&id=<?php echo $row['cat_id']; ?>">Delete</a>
-                                            </td>
-                                        </tr>
+                            <form action="editcatagory.php" method="POST">
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Category ID</label>
+                                    <input type="text" class="form-control" name="catid" readonly
+                                        value="<?php echo $row['cat_id']; ?>">
+                                </div>
 
-                                    <?php } ?>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Category Name</label>
+                                    <input type="text" class="form-control" name="catname" required
+                                        value="<?php echo $row['cat_name']; ?>">
+                                </div>
 
-                                </tbody>
-                            </table>
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Category Description</label>
+                                    <textarea class="form-control" name="catdes" rows="3"
+                                        required><?php echo $row['cat_des']; ?></textarea>
+                                </div>
+
+                                <button type="submit" name="edit_cat" class="btn btn-primary btn-block">Edit
+                                    Category</button>
+                            </form>
 
 
 
@@ -198,7 +198,7 @@ $conn->close();
                     <div style="height: 100vh;"></div>
                     <div class="card mb-4">
                         <div class="card-body">When scrolling, the navigation stays at the top of the page. This is the
-                            end of the Add Category demo.</div>
+                            end of the Edit Category demo.</div>
                     </div>
                 </div>
             </main>
