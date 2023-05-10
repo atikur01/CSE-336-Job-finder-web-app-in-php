@@ -1,7 +1,11 @@
 <?php
 require 'dbconnect.php';
 
-$sql = "SELECT * FROM posts";
+session_start();
+
+$id = $_SESSION["id"];
+
+$sql = "SELECT * FROM posts where author_id= $id ";
 
 if (mysqli_query($conn, $sql)) {
     $tableData = mysqli_query($conn, $sql);
@@ -116,7 +120,7 @@ $conn->close();
                                 <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
                                     data-parent="#sidenavAccordionPages">
                                     <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="login.html">Login</a>
+                                        <a class="nav-link" href="login.php">Login</a>
                                         <a class="nav-link" href="register.html">Register</a>
                                         <a class="nav-link" href="password.html">Forgot Password</a>
                                     </nav>
