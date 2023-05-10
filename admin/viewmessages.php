@@ -1,60 +1,26 @@
 <?php
 require 'dbconnect.php';
-error_reporting(E_ERROR | E_PARSE);
 
-$getcatquery = "SELECT * FROM category";
+$sql = "SELECT * FROM messages";
 
-if (mysqli_query($conn, $getcatquery)) {
-    $getcatquerytableData = mysqli_query($conn, $getcatquery);
+if (mysqli_query($conn, $sql)) {
+    $tableData = mysqli_query($conn, $sql);
 
 } else {
-    echo "Error: " . $getcatquery . "<br>" . $conn->error;
+    echo "Error: " . $sql . "<br>" . $conn->error;
 }
-
-
 
 if (isset($_GET['status'])) {
-    if ($_GET['status'] == 'edit') {
-        $postid = $_GET['id'];
-        $editquery = "Select * FROM posts WHERE post_id=$postid";
-        $tableData = mysqli_query($conn, $editquery);
-        $row = mysqli_fetch_assoc($tableData);
-        //header("location: managecat.php");
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+    if ($_GET['status'] == 'delete') {
+        $delid = $_GET['id'];
+        $delquery = "DELETE FROM messages WHERE id=$delid";
+        mysqli_query($conn, $delquery);
+        header("location: viewmessages.php");
     }
 }
-
-
-if (!empty($_POST)) {
-    $post_id = $_POST['post_id'];
-    $post_title = $_POST['post_title'];
-    $post_content = $_POST['post_content'];
-    $post_ctg = $_POST['post_ctg'];
-    $post_date = date("Y-m-d");
-    $post_summery = $_POST['post_summery'];
-
-    $editpostquery = "UPDATE  posts
-    SET
-    post_title='$post_title',
-    post_content = '$post_content',
-    post_ctg='$post_ctg',
-    post_date='$post_date',
-    post_summery='$post_summery'
-    where post_id=$post_id";
-
-    if ($conn->query($editpostquery) === TRUE) {
-        unset($_POST);
-        echo <<<EOL
-    <div class="alert alert-success text-center" role="alert">
-    Post edited successfully!
-  </div>
-  EOL;
-    }
-}
-
 
 $conn->close();
+
 
 ?>
 
@@ -67,7 +33,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Edit Category - SB Admin</title>
+    <title>Add Category - SB Admin</title>
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"
         crossorigin="anonymous"></script>
@@ -177,58 +143,54 @@ $conn->close();
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid">
-                    <h1 class="mt-4">Edit Category</h1>
+                    <h1 class="mt-4">Feedback</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Edit Category</li>
+                        <li class="breadcrumb-item active">Feedback</li>
                     </ol>
 
                     <div class="card mb-4">
                         <div class="card-body">
 
-                            <form action="editpost.php" method="POST">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Subject</th>
+                                        <th scope="col">Message</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($row = mysqli_fetch_assoc($tableData)) { ?>
+                                        <tr>
+                                            <th scope="row">
+                                                <?php echo $row['name']; ?>
+                                                </td>
+                                            </th>
+                                            <td>
+                                                <?php echo $row['email']; ?>
+                                            </td>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['subject']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['message']; ?>
+                                            </td>
+                                            </td>
+                                            <td>
 
-                                <div class="form-group">
-                                    <label for="exampleFormControlInput1">Post ID</label>
-                                    <input type="text" class="form-control" name="post_id" required readonly
-                                        value="<?php echo $row['post_id'] ?> ">
-                                </div>
+                                                <a class="btn btn-danger"
+                                                    href="?status=delete&&id=<?php echo $row['id']; ?>">Delete</a>
+                                            </td>
+                                        </tr>
 
+                                    <?php } ?>
 
-                                <div class="form-group">
-                                    <label for="exampleFormControlInput1">Post Title</label>
-                                    <input type="text" class="form-control" name="post_title" required
-                                        value="<?php echo $row['post_title'] ?> ">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Post Content</label>
-                                    <textarea class="form-control" name="post_content" rows="3"
-                                        required><?php echo $row['post_content'] ?></textarea>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Category Name</label>
-
-
-                                    <select class="form-control" name="post_ctg" id="post_ctg">
-                                        <?php while ($cat = mysqli_fetch_assoc($getcatquerytableData)) { ?>
-                                            <option value=<?php echo $cat['cat_name'] ?>><?php echo $cat['cat_name'] ?>
-                                            </option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Post Summery</label>
-                                    <textarea class="form-control" name="post_summery" rows="3"
-                                        required><?php echo $row['post_summery'] ?></textarea>
-                                </div>
-
-                                <button type="submit" name="add_cat" class="btn btn-primary btn-block">Edit
-                                    Post</button>
-                            </form>
-
+                                </tbody>
+                            </table>
 
 
 
@@ -237,7 +199,7 @@ $conn->close();
                     <div style="height: 100vh;"></div>
                     <div class="card mb-4">
                         <div class="card-body">When scrolling, the navigation stays at the top of the page. This is the
-                            end of the Edit Category demo.</div>
+                            end of the Add Category demo.</div>
                     </div>
                 </div>
             </main>

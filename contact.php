@@ -1,29 +1,29 @@
 <?php
-
 require 'admin/dbconnect.php';
+error_reporting(E_ERROR | E_PARSE);
 
-$sql = "SELECT * FROM category";
+$sql = "";
+if (!empty($_POST)) {
+  $name = $_POST['name'];
+  $email = $_POST['email'];
+  $subject = $_POST['subject'];
+  $message = $_POST['message'];
+  $sql = "INSERT INTO messages ( name, email,subject ,message )
+    VALUES ('$name', '$email','$subject','$message' )";
 
-if (mysqli_query($conn, $sql)) {
-  $tableData = mysqli_query($conn, $sql);
-
-} else {
-  echo "Error: " . $sql . "<br>" . $conn->error;
+  if ($conn->query($sql) === TRUE) {
+    unset($_POST);
+    echo <<<EOL
+    <div class="alert alert-success text-center" role="alert">
+    Message send successfully!
+  </div>
+  EOL;
+  } else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  }
+  $conn->close();
 }
 
-
-
-$getallpostssql = "SELECT * FROM posts";
-
-if (mysqli_query($conn, $sql)) {
-  $getallpostssqltableData = mysqli_query($conn, $getallpostssql);
-
-} else {
-  echo "Error: " . $getallpostssql . "<br>" . $conn->error;
-}
-
-
-$array = array();
 
 ?>
 
@@ -35,12 +35,12 @@ $array = array();
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
-  <meta name="author" content="TemplateMo">
+  <meta name="author" content="">
   <link
     href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap"
     rel="stylesheet">
 
-  <title>Job finder</title>
+  <title>Job Finder</title>
 
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -85,26 +85,6 @@ https://templatemo.com/tm-551-stand-blog
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
 
-            <?php while ($row = mysqli_fetch_assoc($tableData)) { ?>
-
-
-              <li class="nav-item">
-                <a class="nav-link" href="blog.php?status=view&&id=<?php echo $row['cat_name']; ?>">
-                  <?php echo $row['cat_name'];
-                  array_push($array, $row['cat_name']);
-                  ?>
-                </a>
-              </li>
-              <li class="nav-item">
-
-
-              <?php } ?>
-            <li class="nav-item">
-              <a class="nav-link" href="contact.php">Feedback</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="admin/login.php">Login</a>
-            </li>
           </ul>
         </div>
       </div>
@@ -113,70 +93,68 @@ https://templatemo.com/tm-551-stand-blog
 
   <!-- Page Content -->
   <!-- Banner Starts Here -->
-  <div class="main-banner header-text">
-    <div class="container-fluid">
-      <div class="owl-banner owl-carousel">
+  <div class="heading-page header-text">
 
+  </div>
 
-      </div>
-    </div>
-  </div>
-  </div>
   <!-- Banner Ends Here -->
 
-  <section class="call-to-action">
+
+  <section class="contact-us">
     <div class="container">
       <div class="row">
-        <div class="col-lg-12">
 
+        <div class="col-lg-12">
+          <div class="down-contact">
+            <div class="row">
+              <div class="col-lg-8">
+                <div class="sidebar-item contact-form">
+                  <div class="sidebar-heading">
+                    <h2>Send us a message</h2>
+                  </div>
+                  <div class="content">
+                    <form id="contact" action="contact.php" method="post">
+                      <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                          <fieldset>
+                            <input name="name" type="text" id="name" placeholder="Your name" required="">
+                          </fieldset>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <fieldset>
+                            <input name="email" type="text" id="email" placeholder="Your email" required="">
+                          </fieldset>
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                          <fieldset>
+                            <input name="subject" type="text" id="subject" placeholder="Subject">
+                          </fieldset>
+                        </div>
+                        <div class="col-lg-12">
+                          <fieldset>
+                            <textarea name="message" rows="6" id="message" placeholder="Your Message"
+                              required=""></textarea>
+                          </fieldset>
+                        </div>
+                        <div class="col-lg-12">
+                          <fieldset>
+                            <button type="submit" id="form-submit" class="main-button">Send Message</button>
+                          </fieldset>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
+
+
+
       </div>
     </div>
-  </section>
-
-
-  <section class="blog-posts">
-
-
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8">
-          <div class="all-blog-posts">
-            <div class="row">
-              <div class="col-lg-12">
-
-
-
-                <div class="blog-post">
-
-
-
-
-                  <div class="down-content">
-
-                    <?php while ($row = mysqli_fetch_assoc($getallpostssqltableData)) { ?>
-
-                      <a href="post-details.php?status=view&&id=<?php echo $row['post_id']; ?>">
-                        <h4>
-                          <?php echo $row['post_title'] ?>
-                        </h4>
-                      </a>
-                      <ul class="post-info">
-                        <li><a href="#">
-                            <?php echo $row['post_author'] ?>
-                          </a></li>
-                        <li><a href="#">
-                            <?php echo $row['post_date'] ?>
-                          </a></li>
-
-                      </ul>
-                      <p>
-                        <?php echo $row['post_content'] ?>
-                      </p>
-
-                    <?php } ?>
-                  </div>
-
   </section>
 
 

@@ -1,29 +1,18 @@
 <?php
 
 require 'admin/dbconnect.php';
+error_reporting(E_ERROR | E_PARSE);
 
-$sql = "SELECT * FROM category";
-
-if (mysqli_query($conn, $sql)) {
-  $tableData = mysqli_query($conn, $sql);
-
-} else {
-  echo "Error: " . $sql . "<br>" . $conn->error;
+if (isset($_GET['status'])) {
+  if ($_GET['status'] == 'view') {
+    $postid = $_GET['id'];
+    $editquery = "Select * FROM posts WHERE post_ctg = \"$postid\"";
+    $tableData = mysqli_query($conn, $editquery);
+    //header("location: managecat.php");
+  } else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+  }
 }
-
-
-
-$getallpostssql = "SELECT * FROM posts";
-
-if (mysqli_query($conn, $sql)) {
-  $getallpostssqltableData = mysqli_query($conn, $getallpostssql);
-
-} else {
-  echo "Error: " . $getallpostssql . "<br>" . $conn->error;
-}
-
-
-$array = array();
 
 ?>
 
@@ -35,12 +24,12 @@ $array = array();
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
-  <meta name="author" content="TemplateMo">
+  <meta name="author" content="">
   <link
     href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap"
     rel="stylesheet">
 
-  <title>Job finder</title>
+  <title>Stand Blog Posts</title>
 
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -85,26 +74,6 @@ https://templatemo.com/tm-551-stand-blog
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
 
-            <?php while ($row = mysqli_fetch_assoc($tableData)) { ?>
-
-
-              <li class="nav-item">
-                <a class="nav-link" href="blog.php?status=view&&id=<?php echo $row['cat_name']; ?>">
-                  <?php echo $row['cat_name'];
-                  array_push($array, $row['cat_name']);
-                  ?>
-                </a>
-              </li>
-              <li class="nav-item">
-
-
-              <?php } ?>
-            <li class="nav-item">
-              <a class="nav-link" href="contact.php">Feedback</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="admin/login.php">Login</a>
-            </li>
           </ul>
         </div>
       </div>
@@ -113,70 +82,91 @@ https://templatemo.com/tm-551-stand-blog
 
   <!-- Page Content -->
   <!-- Banner Starts Here -->
-  <div class="main-banner header-text">
-    <div class="container-fluid">
-      <div class="owl-banner owl-carousel">
+  <div class="heading-page header-text">
 
+  </div>
 
-      </div>
-    </div>
-  </div>
-  </div>
   <!-- Banner Ends Here -->
 
   <section class="call-to-action">
     <div class="container">
       <div class="row">
-        <div class="col-lg-12">
 
-        </div>
       </div>
     </div>
   </section>
 
 
-  <section class="blog-posts">
-
-
+  <section class="blog-posts grid-system">
     <div class="container">
       <div class="row">
         <div class="col-lg-8">
           <div class="all-blog-posts">
             <div class="row">
-              <div class="col-lg-12">
 
+              <?php while ($row = mysqli_fetch_assoc($tableData)) { ?>
 
+                <div class="col-lg-6">
+                  <div class="blog-post">
+                    <div class="blog-thumb">
 
-                <div class="blog-post">
-
-
-
-
-                  <div class="down-content">
-
-                    <?php while ($row = mysqli_fetch_assoc($getallpostssqltableData)) { ?>
+                    </div>
+                    <div class="down-content">
 
                       <a href="post-details.php?status=view&&id=<?php echo $row['post_id']; ?>">
                         <h4>
-                          <?php echo $row['post_title'] ?>
+                          <?php echo $row['post_title']; ?>
                         </h4>
                       </a>
                       <ul class="post-info">
                         <li><a href="#">
-                            <?php echo $row['post_author'] ?>
+                            <?php echo $row['post_author']; ?>
                           </a></li>
                         <li><a href="#">
-                            <?php echo $row['post_date'] ?>
+                            <?php echo $row['post_date']; ?>
                           </a></li>
 
                       </ul>
                       <p>
-                        <?php echo $row['post_content'] ?>
+                        <?php echo $row['post_content']; ?>
                       </p>
+                      <div class="post-options">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <ul class="post-tags">
 
-                    <?php } ?>
+
+
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+                </div>
 
+              <?php } ?>
+
+
+
+
+              <div class="col-lg-12">
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="sidebar">
+            <div class="row">
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
 
@@ -202,6 +192,7 @@ https://templatemo.com/tm-551-stand-blog
       </div>
     </div>
   </footer>
+
 
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>

@@ -92,6 +92,11 @@ if ($_SESSION['valid'] != true) {
                             </nav>
                         </div>
 
+                        <a class="nav-link" href="viewmessages.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-solid fa-messages"></i></div>
+                            Feedback
+                        </a>
+
 
                     </div>
                 </div>
