@@ -87,8 +87,8 @@ if ($_SESSION['valid'] != true) {
                         <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
                             data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                                <a class="nav-link" href="addpost.php">Add Post</a>
+                                <a class="nav-link" href="managepost.php">Manage Post</a>
                             </nav>
                         </div>
 
