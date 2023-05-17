@@ -130,7 +130,7 @@ https://templatemo.com/tm-551-stand-blog
                     </a>
                     <ul class="post-info">
                       <li><a href="#">
-                          <?php echo $row['post_author'] ?>
+                          <?php echo $row['post_title'] ?>
                         </a></li>
                       <li><a href="#">
                           <?php echo $row['post_date'] ?>

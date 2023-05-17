@@ -1,7 +1,7 @@
 <?php
 require 'dbconnect.php';
 
-$sql = "SELECT * FROM category";
+$sql = "SELECT * FROM category ORDER BY cat_name DESC";
 
 if (mysqli_query($conn, $sql)) {
     $tableData = mysqli_query($conn, $sql);

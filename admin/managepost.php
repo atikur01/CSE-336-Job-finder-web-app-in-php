@@ -5,7 +5,7 @@ session_start();
 
 $id = $_SESSION["id"];
 
-$sql = "SELECT * FROM posts where author_id= $id ";
+$sql = "SELECT * FROM posts where author_id= $id ORDER BY post_title DESC ";
 
 if (mysqli_query($conn, $sql)) {
     $tableData = mysqli_query($conn, $sql);

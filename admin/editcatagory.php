@@ -14,6 +14,7 @@ if (!empty($_POST)) {
 
     if ($conn->query($sql) === TRUE) {
         unset($_POST);
+        header("Location: index.php");
         echo <<<EOL
     <div class="alert alert-success text-center" role="alert">
     Category Edited successfully!

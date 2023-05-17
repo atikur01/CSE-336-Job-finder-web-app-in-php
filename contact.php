@@ -75,8 +75,10 @@ https://templatemo.com/tm-551-stand-blog
   <header class="">
     <nav class="navbar navbar-expand-lg">
       <div class="container">
-        <a class="navbar-brand" href="index.php">
-          <h2>Job Finder<em>.</em></h2>
+        <a class="navbar-brand" href="/atik/index.php">
+          <div class="logo">
+            <a href="atik/index.php"><img src="atik/assets/img/logo/logo.png" alt=""></a>
+          </div>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
           aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">

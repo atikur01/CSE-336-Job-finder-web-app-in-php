@@ -28,6 +28,7 @@ if (!empty($_POST)) {
 
     if ($conn->query($addpostquery) === TRUE) {
         unset($_POST);
+        header("Location: index.php");
         echo <<<EOL
     <div class="alert alert-success text-center" role="alert">
     Post added successfully!

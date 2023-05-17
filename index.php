@@ -1,5 +1,7 @@
 <?php
 
+header("Location: atik/index.php");
+
 require 'admin/dbconnect.php';
 
 $sql = "SELECT * FROM category";
