@@ -1,6 +1,6 @@
 <?php
 require 'dbconnect.php';
-
+$date;
 if (isset($_GET['status'])) {
     if ($_GET['status'] == 'view') {
         $postid = $_GET['id'];
@@ -8,10 +8,20 @@ if (isset($_GET['status'])) {
         $tableData = mysqli_query($conn, $editquery);
         $row = mysqli_fetch_assoc($tableData);
         //header("location: managecat.php");
+        $date = $row['post_date'];
     } else {
         echo "Error: " . $editquery . "<br>" . $conn->error;
     }
 }
+
+$author_id = $row['author_id'];
+$sql = "SELECT * from users WHERE id = $author_id";
+$result = $conn->query($sql);
+$row2 = $result->fetch_assoc();
+$email = $row2['email'];
+
+
+
 
 ?>
 
@@ -149,7 +159,7 @@ if (isset($_GET['status'])) {
                                         </li>
                                         <li><i class="fas fa-map-marker-alt"></i>Athens, Greece</li>
                                         <li>
-                                            <?php echo $row['post_date'] ?>
+                                            <?php echo $date ?>
                                         </li>
                                     </ul>
                                 </div>
@@ -204,15 +214,19 @@ if (isset($_GET['status'])) {
                                 <h4>Job Overview</h4>
                             </div>
                             <ul>
-                                <li>Posted date : <span>12 Aug 2019</span></li>
+                                <li>Posted date : <span>
+                                        <?php echo $date ?>
+                                    </span></li>
                                 <li>Location : <span>New York</span></li>
                                 <li>Vacancy : <span>02</span></li>
                                 <li>Job nature : <span>Full time</span></li>
                                 <li>Salary : <span>$7,800 yearly</span></li>
-                                <li>Application date : <span>12 Sep 2020</span></li>
+                                <li>Application date : <span>
+                                        <?php echo $date ?>
+                                    </span></li>
                             </ul>
                             <div class="apply-btn2">
-                                <!-- <a href="#" class="btn">Apply Now</a>-->
+                                <a href="mailto:<?php echo $email ?>" class="btn">Apply Now</a>
                             </div>
                         </div>
                         <div class="post-details4  mb-50">
@@ -226,7 +240,9 @@ if (isset($_GET['status'])) {
                             <ul>
                                 <li>Name: <span>Colorlib </span></li>
                                 <li>Web : <span> colorlib.com</span></li>
-                                <li>Email: <span>carrier.colorlib@gmail.com</span></li>
+                                <li>Email: <span>
+                                        <?php echo $email ?>
+                                    </span></li>
                             </ul>
                         </div>
                     </div>

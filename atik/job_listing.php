@@ -228,7 +228,7 @@ if (mysqli_query($conn, $getallpostssql)) {
                                             here, your demo address.</p>
                                     </li>
                                     <li><a href="#">Phone : +8880 44338899</a></li>
-                                    <li><a href="#">Email : info@colorlib.com</a></li>
+                                    <li><a href="#">Email : rdgbrhd@ecample.com</a></li>
                                 </ul>
                             </div>
 
